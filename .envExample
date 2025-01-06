@@ -1,2 +1,0 @@
-PORT=3000
-MONGODB_URI=mongodb+srv://<userName>:<password>@<userName>-cluster.f43xl.mongodb.net/BonVoyage?retryWrites=true
