@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -21,9 +20,9 @@ const userSchema = new mongoose.Schema({
   { timestamps: true }
 );
 userSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        delete returnedObject.hashedPassword;
-    }
+  transform: (document, returnedObject) => {
+    delete returnedObject.hashedPassword;
+  }
 });
 const User = mongoose.model("User", userSchema);
 
