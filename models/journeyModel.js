@@ -21,7 +21,7 @@ const journeySchema = new mongoose.Schema({
     type: String,
   },
   budget: {
-    type: Double,
+    type: Number,
   },
   Emeregency_numbers: {
     type: String,
