@@ -73,8 +73,8 @@ BonVoyage a web application built using the MERN stack (MongoDB, Express.js, Rea
 
 ![landing Page](public/.png)
 ![journey’s Page](public/ .png)
-![ ](public/ .png)
 ![Profile](public/ .png)
+![ ](public/ .png)
 ![ ](public/ .png)
 
 
@@ -106,9 +106,7 @@ BonVoyage a web application built using the MERN stack (MongoDB, Express.js, Rea
 - Node.js
 - MongoDB
 - npm
-- Amazon Web Services
 - Prettier (code formatter)
-- React Select
 
 ## Planned Future Enhancements
 
@@ -128,3 +126,9 @@ o	Click pins to view related journal entries.
 
 
 ---
+
+## Project Done By:
+
+1- Jassim Khamis[LinkedIn](https://www.linkedin.com/in/Jassim-Khamis)
+2- Narjes Saleh [LinkedIn](https://www.linkedin.com/in/Narjes-Saleh)
+3- May Alrowaie [LinkedIn](https://www.linkedin.com/in/may-alrowaie)
