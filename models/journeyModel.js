@@ -1,17 +1,20 @@
 const mongoose = require('mongoose')
 
 const journeySchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  title: { type: String, required: true },
   destination: {
     type: String,
   },
-  start_data: {
+  startDate: {
     type: Date,
   },
-  end_date: {
+  endDate: {
     type: Date,
   },
   people: {
+    type: Number,required: true
+  },
+  budget: {
     type: Number,
   },
   notes: {
@@ -20,15 +23,15 @@ const journeySchema = new mongoose.Schema({
   activities: {
     type: String,
   },
-  budget: {
-    type: Number,
-  },
-  Emeregency_numbers: {
+  emergencyNumbers: {
     type: String,
   },
-  map_link: {
+  coverImage: {
     type: String,
   },
+  mapLink: {
+    type: String,
+  }
 
 })
 

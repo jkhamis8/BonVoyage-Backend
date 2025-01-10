@@ -12,10 +12,10 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
   },
-  journys: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  }],
+  journeys: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "journey"
+  }
 },
   { timestamps: true }
 );
