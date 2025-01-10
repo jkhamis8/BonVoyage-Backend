@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+  },
+  journeys: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "journey"
   }
 },
   { timestamps: true }
