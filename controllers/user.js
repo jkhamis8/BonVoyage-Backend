@@ -32,16 +32,33 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
+    console.log('got user');
 
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
       const token = jwt.sign(
-        { username: user.username, _id: user._id },
+        { username: user.username, _id: user._id, email: user.email },
         process.env.JWT_SECRET
       );
       res.status(200).json({ token, user });
     } else {
       res.status(401).json({ error: 'Invalid username or password.' });
     }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.post('/editUserProfile', async (req, res) => {
+  try {
+    if (req.body.password) {
+      console.log(req.body.password);
+      req.body.password = bcrypt.hashSync(req.body.password, SALT_LENGTH);
+      await User.findByIdAndUpdate(req.body._id, { email: req.body.email, password: req.body.password });
+
+    } else {
+      await User.findByIdAndUpdate(req.body._id, { email: req.body.email });
+    }
+    res.status(200).json({ 'done': 'done' });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

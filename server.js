@@ -3,7 +3,6 @@ dotenv.config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const JWTRouter = require('./controllers/jwt');
 const usersRouter = require('./controllers/user');
 const journeyRouter = require('./controllers/journey');
 
@@ -19,7 +18,6 @@ const cors = require('cors');
 const verifyToken = require('./middleware/verify-token');
 app.use(cors());
 
-app.use('/jwt', JWTRouter);
 app.use('/user', usersRouter);
 app.use('/journey', journeyRouter);
 app.listen(3000, () => {

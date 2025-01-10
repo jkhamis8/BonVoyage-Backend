@@ -11,11 +11,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-  },
-  journys: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  }],
+  }
 },
   { timestamps: true }
 );

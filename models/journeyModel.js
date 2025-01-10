@@ -29,6 +29,10 @@ const journeySchema = new mongoose.Schema({
   map_link: {
     type: String,
   },
+  user: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }],
 
 })
 

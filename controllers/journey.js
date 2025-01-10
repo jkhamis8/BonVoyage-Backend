@@ -6,19 +6,17 @@ const Journey = require('../models/journeyModel.js');
 const verifyToken = require('../middleware/verify-token');
 
 router.use(verifyToken);
-router.get('/viewMyJourneys', async (req, res) => {
+router.get('/getComingJourney', async (req, res) => {
   try {
-    //get the user journey object
-    console.log(req.session.user);
-
-    const journeyObj = await Journey.findById({ "user": req.session.user })
+    //get one journey object if the date is equal or greater than today
+    const journeyObj = await Journey.findOne({ "user": req.session.user, "date": { $gte: new Date() } })
     res.json({ journeyObj });
   } catch (error) {
     console.log(error);
   }
 })
 
-router.post('/viewJourney', async (req, res) => {
+router.post('/viewMyJourneys', async (req, res) => {
   const journeyObj = await Journey.findById(req.body.journeyID)
   let entryObj = []
   journeyObj.forEach(async journey => {
