@@ -31,6 +31,10 @@ const journeySchema = new mongoose.Schema({
   },
   mapLink: {
     type: String,
+  },
+  entrys: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "entry"
   }
 
 })

@@ -1,53 +1,47 @@
-const express = require("express")
+const express = require('express');
+const app = express();
 const router = express.Router()
-const User = require("../models/userModel.js")
-const Journey = require("../models/journeyModel.js")
-const Entry = require("../models/entryModel.js")
+const Journey = require('../models/journeyModel.js');
+const Entry = require('../models/entryModel.js')
+const verifyToken = require('../middleware/verify-token');
+app.use( verifyToken);
 
-const verifyToken = require("../middleware/verify-token")
-
-router.use(verifyToken)
-router.get("/viewEntry", async (req, res) => {
+router.get('/getAllEntrys/:journeyID', async (req, res) => {
   try {
-    //get the user Entry object
-    console.log(req.session.user)
-
-    const entryObj = await Entry.findById({ user: req.session.user })
-    res.json({ entryObj })
+    const journeyID = req.params.journeyID
+    const journey = await Journey.findById(journeyID)
+    const entryObj = await Entry.find({ "_id": { $in: journey.entrys } })
+    res.json({ entryObj });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 })
 ////////////////////////////
-router.post("/viewJourney", async (req, res) => {
-  const journeyObj = await Journey.findById(req.body.journeyID)
-  let entryObj = []
-  journeyObj.forEach(async (journey) => {
-    //add entry to entryObj
-    entryObj.push(await Entry.findById(journey.entryID))
-  })
-
-  res.json({ journeyObj, entryObj })
+router.get("/getEntry/:entryId", async (req, res) => {
+  try {
+    const entryId = req.params.entryId
+    const entryObj = await Entry.findById(entryId)
+    res.json({ entryObj });
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 router.post("/createEntry", async (req, res) => {
-  try {
-    const createdEntry = await Entry.create(req.body)
-    await User.findOneAndUpdate(
-      { user: req.session.user },
-      { $push: { entries: createdEntry._id } }
-    )
+  try {    
+    const createdEntry = await Entry.create(req.body[0])
+    await Journey.findByIdAndUpdate( req.body[1], { $push: { entrys: createdEntry._id } })
+    res.status(200).json({ 'done': 'done' });
   } catch (error) {
     console.log(error)
   }
 })
 
-router.put("/editEntry/:EntryID", async (req, res) => {
+router.put("/editEntry", async (req, res) => {
   try {
-    const id = req.params.EntryID
-    const EntryObj = await Entry.findById(id)
-    EntryObj.set(req.body)
-    EntryObj.save()
+    const entryId = req.body._id
+    await Entry.findByIdAndUpdate(entryId, req.body)
+    res.status(200).json({ 'done': 'done' });
   } catch (error) {
     console.log(error)
   }
@@ -55,12 +49,10 @@ router.put("/editEntry/:EntryID", async (req, res) => {
 
 router.delete("/deleteEntry/:EntryID", async (req, res) => {
   try {
-    const EntryID = req.body.EntryID
-    await User.findOneAndUpdate(
-      { entries: EntryID },
-      { $pull: { Entry: EntryID } }
-    )
+    const EntryID = req.params.EntryID
     await Entry.findByIdAndDelete(EntryID)
+    await Journey.findByIdAndUpdate(req.body.Journey, { $pull: { entrys: EntryID } })
+    res.status(200).json({ 'done': 'done' });
   } catch (error) {
     console.log(error)
   }

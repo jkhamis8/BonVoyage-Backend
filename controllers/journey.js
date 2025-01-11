@@ -3,8 +3,6 @@ const app = express();
 const router = express.Router();
 const User = require('../models/userModel.js');
 const Journey = require('../models/journeyModel.js');
-//const Entry = require('../models/entryModel.js');
-const jwt = require('jsonwebtoken');
 const verifyToken = require('../middleware/verify-token');
 app.use( verifyToken);
 
@@ -15,8 +13,7 @@ router.get('/getComingJourney/:userID', async (req, res) => {
     const user  = await User.findById(userID)
     const today = new Date()
     const journeyObj = await Journey.find({ "_id": { $in: user.journeys},
-                                            "startDate":{ $gte: today.toISOString(), $lt:today.setMonth(today.getMonth() + 3)} })
-    console.log(journeyObj);
+                      "startDate":{ $gte: today.toISOString(), $lt:today.setMonth(today.getMonth() + 3)} })
     res.json({ journeyObj });
   } catch (error) {
     console.log(error);
@@ -35,20 +32,6 @@ router.get('/getAllJourneys/:userID', async (req, res) => {
   }
 })
 
-
-router.post('/createJourney', async (req, res) => {
-  try {
-    console.log(req.body[0]);
-    
-    const createdJourney = await Journey.create(req.body[0])
-    await User.findByIdAndUpdate( req.body[1], { $push: { journeys: createdJourney._id } },)
-    res.status(200).json({ 'done': 'done' });
-  }
-  catch (error) {
-    console.log(error);
-  }
-})
-
 router.get('/getJourney/:JourneyID', async (req, res) => {
   try {
     const JourneyID = req.params.JourneyID
@@ -59,7 +42,18 @@ router.get('/getJourney/:JourneyID', async (req, res) => {
   }
 })
 
-router.post('/editJourney', async (req, res) => {
+router.post('/createJourney', async (req, res) => {
+  try {    
+    const createdJourney = await Journey.create(req.body[0])
+    await User.findByIdAndUpdate( req.body[1], { $push: { journeys: createdJourney._id } },)
+    res.status(200).json({ 'done': 'done' });
+  }
+  catch (error) {
+    console.log(error);
+  }
+})
+
+router.put('/editJourney', async (req, res) => {
   try {    
     const JourneyID = req.body._id
     await Journey.findByIdAndUpdate(JourneyID, req.body)
@@ -73,8 +67,7 @@ router.post('/editJourney', async (req, res) => {
 router.delete('/deleteJourney/:JourneyID', async (req, res) => {
   try {
     const JourneyID = req.params.JourneyID
-    console.log(JourneyID);
-    
+
     await Journey.findByIdAndDelete(JourneyID)
     await User.findByIdAndUpdate(req.body.user, { $pull: { journeys: JourneyID } })
     res.status(200).json({ 'done': 'done' });

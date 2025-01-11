@@ -1,21 +1,20 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const entrySchema = new mongoose.Schema({
+const entrySchema =  new mongoose.Schema({
   title: { type: String, required: true },
-  location: {
-    type: String,
+  date: {
+    type: Date,
   },
   images: {
     type: String,
   },
-  date: {
-    type: Date,
-  },
-
   rate: {
     type: Number,
   },
-  activities: {
+  location: {
+    type: String,
+  },
+  to_do: {
     type: String,
   },
   content: {
