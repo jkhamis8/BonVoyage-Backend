@@ -3,6 +3,7 @@ const app = express();
 const router = express.Router();
 const User = require('../models/userModel.js');
 const Journey = require('../models/journeyModel.js');
+const Entry = require('../models/entryModel.js')
 const verifyToken = require('../middleware/verify-token');
 app.use( verifyToken);
 
@@ -37,6 +38,28 @@ router.get('/getJourney/:JourneyID', async (req, res) => {
     const JourneyID = req.params.JourneyID
     const JourneyObj = await Journey.findById(JourneyID)
     res.json({ JourneyObj });
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+router.get('/getJourneyCalculate/:JourneyID', async (req, res) => {
+  try {
+    const JourneyID = req.params.JourneyID
+    const JourneyObj = await Journey.findById(JourneyID)
+    const entryObj = await Entry.find({ "_id": { $in: JourneyObj.entrys } })
+    let expense=0
+    let rate=0
+    entryObj.map((entry,index)=>{
+      if(typeof entry.expense == 'number'){
+      expense+=entry.expense
+      }
+      if(typeof entry.rate == 'number'){
+      rate+=entry.rate
+      }
+    })
+    rate=rate/entryObj.length
+    res.json({ expense,rate });
   } catch (error) {
     console.log(error);
   }
